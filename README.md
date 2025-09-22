@@ -11,5 +11,7 @@ I use the Script on my Raspbery running in a Screen-Console to ensure that it is
 
 # Modules needed:
 1.) Tibber   install via "python3 -m pip install tibber"
+
 2.) Tesla.py install via "python3 -m pip install tesla.py"
+
 3.) freeze   install vie "python3 -m pip install freeze"
