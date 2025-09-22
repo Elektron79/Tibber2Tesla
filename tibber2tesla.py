@@ -7,11 +7,11 @@ import requests
 
 TIBBER_API_ENDPOINT = "https://api.tibber.com/v1-beta/gql"
 
-email_address = <your tesla email>
+email_address = "mail@example.com"
 
 
-tibber_access_token =  <your token>
-tibber_home_id =  <your home ID>
+tibber_access_token =  "<your token>"
+tibber_home_id =  "<your home ID>"
 
 tibber_account = tibber.Account(tibber_access_token)
 tibber_home = tibber_account.homes[0]
