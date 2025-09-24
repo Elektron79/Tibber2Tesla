@@ -7,11 +7,11 @@ import requests
 
 TIBBER_API_ENDPOINT = "https://api.tibber.com/v1-beta/gql"
 
-email_address = "mail@example.com"
+email_address = "mail@example.org"
 
 
-tibber_access_token =  "<your token>"
-tibber_home_id =  "<your home ID>"
+tibber_access_token =  "asdfghjkl1234567890"
+tibber_home_id =  "12345678-1234-4321-2345-123456789012"
 
 tibber_account = tibber.Account(tibber_access_token)
 tibber_home = tibber_account.homes[0]
@@ -51,10 +51,10 @@ def fetchCurrentPrices():
     global lowest_current_price_hour
 
     prices_today_and_tomorrow = get_prices_for_today_and_tomorrow()
-    prices_today = prices_today_and_tomorrow[0:24]
+    prices_today = prices_today_and_tomorrow[0:96]
 
-    if len(prices_today_and_tomorrow) > 24:
-        prices_tomorrow = prices_today_and_tomorrow[24:48]
+    if len(prices_today_and_tomorrow) > 96:
+        prices_tomorrow = prices_today_and_tomorrow[96:192]
         sorted_prices_tomorrow = sort_prices(prices_tomorrow)  # Assuming sort_prices() is defined somewhere
 
     # Fetch historic price data
@@ -79,7 +79,7 @@ def get_prices_for_today_and_tomorrow():
       viewer {{
         home(id: "{tibber_home_id}") {{
           currentSubscription {{
-            priceInfo {{
+            priceInfo (resolution: QUARTER_HOURLY) {{
               current {{
                 total
                 startsAt
@@ -179,8 +179,8 @@ def sort_prices(pricesTodayList):
 
 
 def create_tariff(sorted_prices_list, num_off_peak, num_partial_peak, num_peak, num_super_peak):
-    if num_off_peak + num_partial_peak + num_peak + num_super_peak != 24:
-        raise ValueError("The sum of the number of values for each price category must be 24.")
+    if num_off_peak + num_partial_peak + num_peak + num_super_peak != 96:
+        raise ValueError("The sum of the number of values for each price category must be 96.")
 
     # Initialize the tou_periods and energy_charges dictionaries
     tou_periods = {"SUPER_OFF_PEAK": [], "OFF_PEAK": [], "PARTIAL_PEAK": [], "ON_PEAK": []}
@@ -200,15 +200,29 @@ def create_tariff(sorted_prices_list, num_off_peak, num_partial_peak, num_peak, 
             price_category = "PARTIAL_PEAK"
         else:
             price_category = "ON_PEAK"
+        # Lets calculate the hour and the minute
+        minute=hour%4
+        hour=hour//4
+                    
+        if minute == 1:
+            minute=15
+        elif minute == 2:
+            minute=30
+        elif minute == 3:
+            minute=45
+        else:
+            if minute != 0:
+                print("Minutes are wrong")
+                print(minute)
 
         # Add the hour to the tou_periods
         tou_periods[price_category].append({
             "fromDayOfWeek": 0,
             "fromHour": hour,
-            "fromMinute": 0,
+            "fromMinute": minute,
             "toDayOfWeek": 6,
-            "toHour": hour+1,
-            "toMinute": 0,
+            "toHour": hour,
+            "toMinute": minute+15,
         })
 
         # Update the energy_charges if necessary
@@ -293,7 +307,7 @@ def setTimeTableForPowerwall():
 
 
         
-        for i in range(0,24):
+        for i in range(0,96):
 
             if(sorted_prices_map[i][1]) <= minPrice + (diffPrice*(threshold1/100)):
                 priceLevel1+=1
@@ -320,7 +334,7 @@ def setTimeTableForPowerwall():
 startup = True
 
 while True:
-        
+    now = datetime.now()    
     if now.hour == 0 and now.minute == 1 or startup == True:
         
         startup = False
