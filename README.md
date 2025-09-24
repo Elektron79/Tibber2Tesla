@@ -9,6 +9,10 @@ Background could be found here: https://github.com/tdorssers/TeslaPy/issues/172
 The Script runs in an endless loop, checking every minute if midnight is crossed and updates the prices for the new day at 0:01.</br>
 I use the Script on my Raspbery running in a Screen-Console to ensure that it is running even when I'm logged out.
 
+# Update in Version 2.x.y
+The Script now supports the prices to be changed every 15 Minutes - in the Version 1.x.y it was only once per hour.
+This is required as the prices in germany from 1.october on wille be changed/different every 15 minutes. 
+
 # Modules needed:
 1.) Tibber   install via `python3 -m pip install tibber` </br>
-2.) Tesla.py install via `python3 -m pip install tesla.py`
+2.) Tesla.py install via `python3 -m pip install teslapy`
