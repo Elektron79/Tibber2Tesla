@@ -13,7 +13,7 @@ I use the Script on my Raspbery running in a Screen-Console to ensure that it is
 The Script now supports the prices to be changed every 15 Minutes - in the Version 1.x.y it was only once per hour.
 This is required as the prices in germany from 1.october on wille be changed/different every 15 minutes. 
 
-ä known issues:
+# Known issues:
 It seems to be that tesla is currently havin issues with quaterly time frames. The schedule is correctly shown in the App, but the powerwall behaivs strange. I tested to create a Plan in the App but was not able as I was onyl able to select 30 Miniutes as minimum.
 So currently it's better to use the version 1
 
